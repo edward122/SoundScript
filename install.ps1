@@ -23,7 +23,7 @@ New-Item -ItemType Directory -Force -Path $InstallPath | Out-Null
 # Download latest release
 Write-Host "🌐 Fetching latest release information..."
 try {
-    $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/YOUR_USERNAME/SoundScript/releases/latest"
+    $latestRelease = Invoke-RestMethod -Uri "https://api.github.com/repos/edward122/SoundScript/releases/latest"
     $downloadUrl = $latestRelease.assets | Where-Object { $_.name -eq "SoundScript.exe" } | Select-Object -ExpandProperty browser_download_url
     
     if (-not $downloadUrl) {
@@ -37,7 +37,7 @@ try {
     Write-Host "✅ Downloaded successfully!" -ForegroundColor Green
 } catch {
     Write-Host "❌ Failed to download: $($_.Exception.Message)" -ForegroundColor Red
-    Write-Host "💡 You can manually download from: https://github.com/YOUR_USERNAME/SoundScript/releases" -ForegroundColor Yellow
+    Write-Host "💡 You can manually download from: https://github.com/edward122/SoundScript/releases" -ForegroundColor Yellow
     exit 1
 }
 
@@ -108,7 +108,7 @@ Write-Host "1. Get API keys from OpenAI and Google AI Studio"
 Write-Host "2. Run SoundScript and enter your keys in Settings"
 Write-Host "3. Start dictating with Ctrl+Win!"
 Write-Host ""
-Write-Host "📚 Documentation: https://github.com/YOUR_USERNAME/SoundScript"
+Write-Host "📚 Documentation: https://github.com/edward122/SoundScript"
 
 # Ask to run now
 $runNow = Read-Host "🚀 Run SoundScript now? (Y/n)"

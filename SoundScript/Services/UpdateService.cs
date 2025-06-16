@@ -12,7 +12,7 @@ namespace SoundScript.Services
     public class UpdateService : IDisposable
     {
         private readonly HttpClient _httpClient;
-        private const string GITHUB_API_URL = "https://api.github.com/repos/YOUR_USERNAME/SoundScript/releases/latest"; // Replace YOUR_USERNAME with actual GitHub username
+        private const string GITHUB_API_URL = "https://api.github.com/repos/edward122/SoundScript/releases/latest";
         private const string UPDATE_CHECK_INTERVAL_HOURS = "24"; // Check once per day
         
         public UpdateService()

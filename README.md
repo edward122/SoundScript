@@ -17,14 +17,14 @@ Transform your voice into perfectly formatted text with AI-powered transcription
 ## 🚀 Quick Start
 
 ### Option 1: Download Executable (Recommended)
-1. Download `SoundScript.exe` from the [latest release](https://github.com/YOUR_USERNAME/SoundScript/releases)
+1. Download `SoundScript.exe` from the [latest release](https://github.com/edward122/SoundScript/releases)
 2. Run the executable - no installation required!
 3. Enter your API keys in Settings
 4. Start dictating with `Ctrl+Win`
 
 ### Option 2: Build from Source
 ```bash
-git clone https://github.com/YOUR_USERNAME/SoundScript.git
+git clone https://github.com/edward122/SoundScript.git
 cd SoundScript
 dotnet restore
 dotnet build
@@ -95,7 +95,7 @@ Place custom audio files in `%AppData%\SoundScript\`:
 - Check Windows audio permissions
 
 ### Getting Help
-1. Check the [Issues](https://github.com/YOUR_USERNAME/SoundScript/issues) page
+1. Check the [Issues](https://github.com/edward122/SoundScript/issues) page
 2. Create a new issue with details about your problem
 3. Include your Windows version and error messages
 
