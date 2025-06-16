@@ -1,0 +1,303 @@
+<Window x:Class="SoundScript.Views.HistoryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:utils="clr-namespace:SoundScript.Utils"
+        Title="SoundScript - History" 
+        Height="800" 
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F0F0F"
+        ResizeMode="CanResize">
+
+    <Window.Resources>
+        <utils:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0" Orientation="Vertical">
+                <TextBlock Text="Dictation History" 
+                          FontSize="32" 
+                          FontWeight="Bold" 
+                          Foreground="#FFFFFF" 
+                          Margin="0,0,0,4"/>
+                <TextBlock Text="View and manage your voice transcription sessions" 
+                          FontSize="14" 
+                          Foreground="#888888"/>
+            </StackPanel>
+            
+            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                <TextBox x:Name="SearchBox"
+                        Width="250"
+                        Height="35"
+                        Background="#2D2D2D"
+                        Foreground="#FFFFFF"
+                        BorderBrush="#404040"
+                        BorderThickness="1"
+                        Padding="12,8"
+                        FontSize="14"
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                        Margin="0,0,12,0">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background" Value="#2D2D2D"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+                
+                <Button Content="🔍 Search" 
+                        Background="#4A9EFF"
+                        Foreground="#FFFFFF"
+                        BorderThickness="0"
+                        Padding="16,8"
+                        FontSize="14"
+                        Command="{Binding SearchCommand}"
+                        Margin="0,0,12,0"/>
+                        
+                <Button Content="📊 Stats" 
+                        Background="#00D4AA"
+                        Foreground="#FFFFFF"
+                        BorderThickness="0"
+                        Padding="16,8"
+                        FontSize="14"
+                        Command="{Binding ShowStatsCommand}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Stats Summary -->
+        <Border Grid.Row="1" 
+                Background="#1A1A1A" 
+                CornerRadius="12" 
+                Padding="24"
+                Margin="0,0,0,20">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Total Sessions -->
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Stats.TotalSessions}" 
+                              FontSize="28" 
+                              FontWeight="Bold" 
+                              Foreground="#4A9EFF"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="Total Sessions" 
+                              FontSize="12" 
+                              Foreground="#CCCCCC"
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Total Words -->
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Stats.TotalWords}" 
+                              FontSize="28" 
+                              FontWeight="Bold" 
+                              Foreground="#FF6B35"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="Total Words" 
+                              FontSize="12" 
+                              Foreground="#CCCCCC"
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Average WPM -->
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Stats.AverageWPM, StringFormat='{}{0:F0}'}" 
+                              FontSize="28" 
+                              FontWeight="Bold" 
+                              Foreground="#00D4AA"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="Avg WPM" 
+                              FontSize="12" 
+                              Foreground="#CCCCCC"
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Total Time -->
+                <StackPanel Grid.Column="3" HorizontalAlignment="Center">
+                    <TextBlock Text="{Binding Stats.FormattedTotalTime}" 
+                              FontSize="28" 
+                              FontWeight="Bold" 
+                              Foreground="#9B59B6"
+                              HorizontalAlignment="Center"/>
+                    <TextBlock Text="Total Time" 
+                              FontSize="12" 
+                              Foreground="#CCCCCC"
+                              HorizontalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- History List -->
+        <Border Grid.Row="2" 
+                Background="#1A1A1A" 
+                CornerRadius="12" 
+                Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- List Header -->
+                <Border Grid.Row="0" 
+                        Background="#2D2D2D" 
+                        CornerRadius="12,12,0,0" 
+                        Padding="24,16">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="Time" FontWeight="SemiBold" Foreground="#FFFFFF" Width="80"/>
+                        <TextBlock Grid.Column="1" Text="Transcription" FontWeight="SemiBold" Foreground="#FFFFFF" Margin="16,0"/>
+                        <TextBlock Grid.Column="2" Text="Words" FontWeight="SemiBold" Foreground="#FFFFFF" Width="60" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="WPM" FontWeight="SemiBold" Foreground="#FFFFFF" Width="60" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="Duration" FontWeight="SemiBold" Foreground="#FFFFFF" Width="80" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="5" Text="Actions" FontWeight="SemiBold" Foreground="#FFFFFF" Width="80" TextAlignment="Center"/>
+                    </Grid>
+                </Border>
+
+                <!-- Sessions List -->
+                <ScrollViewer Grid.Row="1" 
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Sessions}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Background="Transparent" 
+                                       Padding="24,16"
+                                       BorderBrush="#333333"
+                                       BorderThickness="0,0,0,1">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#252525"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Time -->
+                                        <TextBlock Grid.Column="0" 
+                                                  Text="{Binding TimeAgo}" 
+                                                  FontSize="12" 
+                                                  Foreground="#888888" 
+                                                  Width="80"
+                                                  VerticalAlignment="Top"/>
+
+                                        <!-- Transcription Preview -->
+                                        <StackPanel Grid.Column="1" Margin="16,0">
+                                            <TextBlock Text="{Binding PreviewText}" 
+                                                      FontSize="14" 
+                                                      Foreground="#FFFFFF" 
+                                                      TextWrapping="Wrap"
+                                                      MaxHeight="60"
+                                                      TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding FormattedTimestamp}" 
+                                                      FontSize="11" 
+                                                      Foreground="#666666" 
+                                                      Margin="0,4,0,0"/>
+                                        </StackPanel>
+
+                                        <!-- Word Count -->
+                                        <TextBlock Grid.Column="2" 
+                                                  Text="{Binding WordCount}" 
+                                                  FontSize="14" 
+                                                  Foreground="#FF6B35" 
+                                                  FontWeight="Medium"
+                                                  Width="60" 
+                                                  TextAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+
+                                        <!-- WPM -->
+                                        <TextBlock Grid.Column="3" 
+                                                  Text="{Binding WordsPerMinute, StringFormat='{}{0:F0}'}" 
+                                                  FontSize="14" 
+                                                  Foreground="#00D4AA" 
+                                                  FontWeight="Medium"
+                                                  Width="60" 
+                                                  TextAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+
+                                        <!-- Duration -->
+                                        <TextBlock Grid.Column="4" 
+                                                  Text="{Binding FormattedDuration}" 
+                                                  FontSize="14" 
+                                                  Foreground="#4A9EFF" 
+                                                  FontWeight="Medium"
+                                                  Width="80" 
+                                                  TextAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+
+                                        <!-- Actions -->
+                                        <StackPanel Grid.Column="5" 
+                                                   Orientation="Horizontal" 
+                                                   Width="80"
+                                                   HorizontalAlignment="Center">
+                                            <Button Content="👁️" 
+                                                   Background="Transparent"
+                                                   Foreground="#CCCCCC"
+                                                   BorderThickness="0"
+                                                   Padding="4"
+                                                   FontSize="12"
+                                                   Command="{Binding DataContext.ViewSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                   CommandParameter="{Binding}"
+                                                   ToolTip="View Details"
+                                                   Margin="0,0,4,0"/>
+                                            <Button Content="🗑️" 
+                                                   Background="Transparent"
+                                                   Foreground="#FF4444"
+                                                   BorderThickness="0"
+                                                   Padding="4"
+                                                   FontSize="12"
+                                                   Command="{Binding DataContext.DeleteSessionCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                   CommandParameter="{Binding}"
+                                                   ToolTip="Delete"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window> 
